@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:converters="clr-namespace:MauiAppEventos.Converters"
+             x:Class="MauiAppEventos.Views.CadastroEventos"
+             Title="">
+
+    <ContentPage.Resources>
+        <converters:DateAddDaysConverter x:Key="DateAddDaysConverter"/>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label Text="Cadastro de Eventos" 
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#512BD4"/>
+
+            <!-- Seletor de Evento -->
+            <Label Text="Escolha seu evento:"/>
+            <Picker x:Name="pickerEvento" Title="Selecione um evento">
+                <Picker.Items>
+                    <x:String>APAS (Associação Paulista de Supermercados)</x:String>
+                    <x:String>Festa de São João</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <!-- Seletor de Local -->
+            <Label Text="Local do Evento:"/>
+            <Picker x:Name="pickerLocal" Title="Selecione o local">
+                <Picker.Items>
+                    <x:String>Expo Center Norte</x:String>
+                    <x:String>CTN Centro de tradições Nordestinas</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <!-- Período do Evento -->
+            <Label Text="Data do Evento:"/>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <!-- Data de Início -->
+                <DatePicker x:Name="dtpInicio" 
+                            Format="dd/MM/yyyy" 
+                            Grid.Column="0"
+                            MinimumDate="{Binding Source={x:Static system:DateTime.Today}}"/>
+
+                <!-- Data de Término com conversor -->
+                <DatePicker x:Name="dtpTermino" 
+                            Format="dd/MM/yyyy" 
+                            Grid.Column="1"
+                            MinimumDate="{Binding Source={x:Reference dtpInicio}, 
+                                               Path=Date, 
+                                               Converter={StaticResource DateAddDaysConverter}, 
+                                               ConverterParameter=1}"/>
+            </Grid>
+
+            <!-- Quantidade de Participantes -->
+            <Label Text="Quantidade de Participantes:"/>
+            <Stepper x:Name="stpParticipantes" Minimum="1" Maximum="1000" Value="1"/>
+            <Label Text="{Binding Source={x:Reference stpParticipantes}, 
+                               Path=Value, 
+                               StringFormat='{0} participantes'}"/>
+
+            <!-- Informação sobre valor fixo -->
+            <Label Text="Valor: R$ 50,00 por participante" 
+                   FontAttributes="Italic"
+                   TextColor="Gray"/>
+
+            <!-- Botão para avançar -->
+            <Button Text="Avançar →" 
+                    Clicked="BtnAvancar_Clicked"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"
+                    CornerRadius="20"
+                    Margin="0,20"
+                    HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
